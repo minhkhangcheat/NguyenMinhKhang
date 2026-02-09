@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Minh Khang Đẹp Trai</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: black;
+}
+
+#scene {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: perspective(1000px) rotateX(7deg);
+    transform-origin: center;
+}
+
+.text {
+    position: absolute;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui;
+    font-weight: 500;
+    letter-spacing: 0.7px;
+    color: #ff9acb;
+    white-space: nowrap;
+    pointer-events: none;
+    text-shadow: 0 0 8px rgba(255,150,200,0.6);
+    opacity: 0;
+    transform: translateY(var(--startY));
+    animation: floatDown var(--dur) cubic-bezier(0.25, 0.6, 0.35, 1) forwards;
+}
+
+@keyframes floatDown {
+    0% { opacity: 0; transform: translateY(var(--startY)); }
+    10% { opacity: var(--op); }
+    100% { opacity: var(--op); transform: translateY(130vh); }
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    opacity: 0.55;
+}
+</style>
+</head>
+
+<body>
+<div id="scene"></div>
+
+<script>
+const scene = document.getElementById("scene");
+
+function rand(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+for (let i = 0; i < 320; i++) {
+    const s = document.createElement("div");
+    s.className = "star";
+    s.style.left = rand(0, 100) + "vw";
+    s.style.top = rand(0, 100) + "vh";
+    s.style.opacity = Math.random();
+    scene.appendChild(s);
+}
+
+function spawn() {
+    const t = document.createElement("div");
+    t.className = "text";
+    
+    const contents = ["Minh Khang", "💝"];
+    t.innerText = contents[Math.floor(Math.random() * contents.length)];
+
+    const size = rand(24, 36);
+    t.style.fontSize = size + "px";
+    t.style.left = rand(4, 96) + "vw";
+
+    const startY = rand(-40, 40);
+    t.style.setProperty("--startY", startY + "px");
+
+    const op = rand(0.45, 0.95);
+    t.style.setProperty("--op", op);
+
+    const dur = rand(20, 35);
+    t.style.setProperty("--dur", dur + "s");
+
+    scene.appendChild(t);
+    
+    setTimeout(() => t.remove(), dur * 1000);
+}
+
+for (let i = 0; i < 150; i++) {
+    setTimeout(spawn, i * 60);
+}
+
+setInterval(spawn, 100);
+</script>
+</body>
+</html>
